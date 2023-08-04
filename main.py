@@ -2,6 +2,7 @@ from fastapi import FastAPI, Response
 from fastapi.responses import FileResponse
 import qrcode
 import io
+import base64
 
 app = FastAPI()
 
@@ -16,9 +17,11 @@ async def root():
 @app.get(
     "/qrcode",
     response_class=FileResponse,
-    response_description="Return a qrcode as png-file",
+    response_description="Return a qrcode as png-file from a base64 encoded text",
 )
-async def get_qrcode(text: str):
+async def get_qrcode(text_b64: str):
+    text = base64.b64decode(text_b64).decode("utf-8")
+    print(f"Creating qrcode with text: {text}")
     img = qrcode.make(text)
     f = io.BytesIO()
     img.save(f, "PNG")
