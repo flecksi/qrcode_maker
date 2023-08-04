@@ -21,7 +21,6 @@ async def root():
 )
 async def get_qrcode(text_b64: str):
     text = base64.b64decode(text_b64).decode("utf-8")
-    print(f"Creating qrcode with text: {text}")
     img = qrcode.make(text)
     f = io.BytesIO()
     img.save(f, "PNG")
